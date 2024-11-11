@@ -11,7 +11,8 @@ public class QuestMasterTests
     public void AssignQuest_ValidInput_CreatesQuestAndNotifiesPlayerWithCorrectMessage()
     {
         // Arrange
-        var questGenerator = new QuestGenerator();
+        var rewardCalculator = new QuestRewardCalculator();
+        var questGenerator = new QuestGenerator(rewardCalculator);
         var notificationServiceMock = Substitute.For<INotificationService>();
 
         var sut  = new QuestMaster(questGenerator,notificationServiceMock);

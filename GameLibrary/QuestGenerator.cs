@@ -2,22 +2,19 @@
 
 public class QuestGenerator
 {
-    private readonly double rewardMultiplier;
+    private readonly QuestRewardCalculator questRewardCalculator;
 
-    public QuestGenerator(double rewardMultiplier = 1.0)
+    public QuestGenerator(QuestRewardCalculator questRewardCalculator)
     {
-        this.rewardMultiplier = rewardMultiplier;
+        this.questRewardCalculator = questRewardCalculator;
     }
 
     public Quest GenerateQuest(int questDifficulty)
     {
-        int reward = CalculateQuestReward(questDifficulty);
+        int reward = questRewardCalculator.CalculateQuestReward(questDifficulty);
         string name = $"Quest Level {questDifficulty}";
         return new Quest(name, reward);
     }
 
-    private int CalculateQuestReward(int questDifficulty)
-    {
-        return (int)(questDifficulty * 100 * rewardMultiplier);
-    }
+    
 }

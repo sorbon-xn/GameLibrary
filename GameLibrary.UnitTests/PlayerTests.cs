@@ -4,17 +4,17 @@ namespace GameLibrary.UnitTests;
 
 public class PlayerTests
 {
-    readonly Player sut;
-    public PlayerTests()
-    {
-        sut = new("Alice", 1, DateTime.Now);
-    }
+    // readonly Player sut;
+    // public PlayerTests()
+    // {
+    //     sut = new("Alice", 1, DateTime.Now);
+    // }
 
     [Fact]
     public void IncreaseLevel_WhenCalled_HasExpectedLevel()
     {
         // Arrange
-        // Player sut = new("Alice", 1, DateTime.Now);
+        Player sut = CreatePlayer(level:1);
 
         // Act
         sut.IncreaseLevel();
@@ -32,7 +32,7 @@ public class PlayerTests
     public void Greet_ValidGreeting_ReturnsGreetingWithName()
     {
         // Arrange
-        // var sut = new Player("Alice", 1, DateTime.Now);
+        var sut = CreatePlayer(name: "Alice");
 
         // Act
         var result = sut.Greet("Hello");
@@ -51,19 +51,19 @@ public class PlayerTests
         var currentDate = DateTime.Now;
 
         // Act
-        var sut2 = new Player("Alice", 1, currentDate);
+        var sut = CreatePlayer(joinDate:currentDate);
 
         // Assert
-        sut2.JoinDate.Should().Be(currentDate);
-        sut2.JoinDate.Should().BeCloseTo(currentDate, TimeSpan.FromMilliseconds(500));
-        sut2.JoinDate.Should().BeWithin(TimeSpan.FromMilliseconds(500)).Before(currentDate);
+        sut.JoinDate.Should().Be(currentDate);
+        sut.JoinDate.Should().BeCloseTo(currentDate, TimeSpan.FromMilliseconds(500));
+        sut.JoinDate.Should().BeWithin(TimeSpan.FromMilliseconds(500)).Before(currentDate);
     }    
 
     [Fact]
     public void AddItemToInventory_WithValidItem_AddsTheItem()
     {
         // Arrange
-        // var sut = new Player("Alice", 1, DateTime.Now);
+        var sut = CreatePlayer();
         var item = new InventoryItem(101, "Sword", "A sharp blade.");        
 
         // Act
@@ -81,7 +81,7 @@ public class PlayerTests
     public void Greet_NullOrEmptyGreeting_ThrowsArgumentException()
     {
         // Arrange
-        // var sut = new Player("Alice", 1, DateTime.Now);
+        var sut = CreatePlayer();
 
         // Act
         Action act = () => sut.Greet("");
@@ -94,7 +94,7 @@ public class PlayerTests
     public void IncreaseLevel_WhenCalled_RaisesLevelUpEvent()
     {
         // Arrange
-        // var sut = new Player("Alice", 1, DateTime.Now);
+        var sut = CreatePlayer();
         using var monitoredSut = sut.Monitor();
         
         // Act
@@ -109,7 +109,7 @@ public class PlayerTests
     public void GrantExperienceAndIncreaseLevel_WhenCalled_IncreaseExperienceAndLevel()
     {
         // Arrange
-        // var sut = new Player("Alice", 1, DateTime.Now);
+        var sut = CreatePlayer(level:1);
         var initialExperiencePoints = sut.ExperiencePoints;
 
         // Act
@@ -130,7 +130,7 @@ public class PlayerTests
     public void IncreaseLevel_RandomOfTimes_LevelIncreasesCorrectly()
     {
         // Arrang
-        // var sut = new Player("Alice",1, new DateTime(2020, 1, 1));
+        var sut = CreatePlayer(level: 1);
         int randomIncreases = Random.Shared.Next(1, 100);
 
         // Act
@@ -141,6 +141,16 @@ public class PlayerTests
 
         // Assert
         sut.Level.Should().Be(1+randomIncreases);
+    }
+
+
+    private static Player CreatePlayer(
+        string name ="Bob",
+        int level = 2,
+        DateTime? joinDate = null
+    )
+    {
+        return new(name, level,joinDate ?? DateTime.Now);
     }
 }
 
